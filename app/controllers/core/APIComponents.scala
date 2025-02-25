@@ -1,4 +1,4 @@
-package controllers
+package controllers.core
 
 import play.api.mvc.ControllerComponents
 
@@ -10,6 +10,7 @@ trait APIComponents {
 
 object APIComponents {
 
-  class Default(val controllerComponents: ControllerComponents) extends APIComponents
+  class Default(val controllerComponents: ControllerComponents)
+      extends APIComponents
 
 }

@@ -2,7 +2,7 @@ import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.routing.Router
-import service.ServiceModules
+import service.ServiceModule
 
 class RootApplicationLoader extends ApplicationLoader {
   override def load(context: Context): Application = {

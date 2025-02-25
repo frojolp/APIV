@@ -9,9 +9,12 @@ scalaVersion := "2.13.16"
 libraryDependencies += ws
 //libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.0" % Test
+libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.2.0"
+
 
 libraryDependencies ++= Seq(
-  "org.playframework" %% "play-slick" % "6.1.1",
+  "org.playframework" %% "play-slick" % "6.1.0",
+  "org.playframework" %% "play-slick-evolutions" % "6.1.0",
   "org.postgresql" % "postgresql" % "42.3.1",
   "org.jooq" % "jooq" % "3.20.0",
   "com.softwaremill.macwire" %% "macros" % "2.3.3" % Provided,

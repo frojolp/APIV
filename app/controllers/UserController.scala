@@ -1,30 +1,33 @@
 package controllers
 
+import controllers.core.{APIComponents, APIController}
 import models.User.newuserFormat
 import models._
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc._
+import play.api.routing.Router
+import repository.UserRepository
+import play.api.routing.sird._
+import service.{ServiceModule, UserService}
 
 import java.util.UUID
-import java.util.prefs.Preferences
-import javax.inject._
-import scala.concurrent.ExecutionContext
 
+class UserController(
+    userService: UserService,
+    apiComponents: APIComponents
+) extends APIController(apiComponents) {
 
-class UserController @Inject()(cc: ControllerComponents, userRepository: UserRepository)(implicit val executionContext: ExecutionContext) extends AbstractController(cc) {
+  def getAll() = userService.getAll()
 
-  def getAll(): Action[AnyContent] = {
-    Action.async(userRepository.listAll().map(items => Ok(Json.toJson(items))))
-  }
+  def create() = userService.create()
 
-  def create(): Action[newUser] = {
-    Action.async(parse.json[newUser]) {
-      request =>
-        userRepository.create(request.body).map(_ => Created)
+  def findByID(userID: UUID) = userService.findByID(userID)
+
+  override val router: Router = Router
+    .from {
+      case GET(p"")     => getAll()
+      case GET(p"/$id") => findByID(UUID.fromString(id))
+      case POST(p"")    => create()
     }
-  }
-
-  def findByID(userid: UUID): Action[AnyContent] = {
-    Action.async(userRepository.findByID(userid).map(items => Ok(Json.toJson(items))))
-  }
+    .withPrefix("/user")
 }
