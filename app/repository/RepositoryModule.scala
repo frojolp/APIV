@@ -14,4 +14,9 @@ trait RepositoryModule {
   this: BuiltInComponents with SlickComponents =>
   lazy val dbconfig = slickApi.dbConfig[JdbcProfile](DbName("default"))
   lazy val userRepository: UserRepository = wire[UserRepository]
+  lazy val bankAccountRepository: BankAccountRepository =
+    wire[BankAccountRepository]
+  lazy val transactionRepository: TransactionRepository =
+    wire[TransactionRepository]
+
 }

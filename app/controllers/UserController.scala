@@ -6,22 +6,32 @@ import models._
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc._
 import play.api.routing.Router
-import repository.UserRepository
 import play.api.routing.sird._
 import service.{ServiceModule, UserService}
 
 import java.util.UUID
+import scala.concurrent.ExecutionContext
 
 class UserController(
     userService: UserService,
     apiComponents: APIComponents
-) extends APIController(apiComponents) {
+)(implicit val executionContext: ExecutionContext)
+    extends APIController(apiComponents) {
 
-  def getAll() = userService.getAll()
+  def getAll(): Action[AnyContent] = {
+    Action.async(userService.getAll().map(items => Ok(Json.toJson(items))))
+  }
 
-  def create() = userService.create()
-
-  def findByID(userID: UUID) = userService.findByID(userID)
+  def create(): Action[newUser] = {
+    Action.async(parse.json[newUser]) { request =>
+      userService.create(request.body).map(_ => Created)
+    }
+  }
+  def findByID(userID: UUID): Action[AnyContent] = {
+    Action.async(
+      userService.findByID(userID).map(items => Ok(Json.toJson(items)))
+    )
+  }
 
   override val router: Router = Router
     .from {

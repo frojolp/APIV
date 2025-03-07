@@ -1,17 +1,12 @@
 package repository
 
-import com.softwaremill.macwire.wire
 import models.{User, newUser}
-import play.api.{Configuration, Environment}
-import play.api.db.slick.DatabaseConfigProvider
-import play.api.inject.ApplicationLifecycle
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 import slick.lifted.ProvenShape
 
 import java.sql.Date
 import java.util.UUID
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 class UserRepository(dbConfig: DatabaseConfig[JdbcProfile])(implicit
@@ -23,15 +18,10 @@ class UserRepository(dbConfig: DatabaseConfig[JdbcProfile])(implicit
 
   private class UserTable(tag: Tag) extends Table[User](tag, "users") {
     def userid = column[UUID]("userid", O.PrimaryKey)
-
     def vorname = column[String]("vorname")
-
     def nachname = column[String]("nachname")
-
     def geburtstag = column[Date]("geburtstag")
-
     def telefonnummer = column[String]("telefonnummer")
-
     def email = column[String]("email")
 
     override def * : ProvenShape[User] = (

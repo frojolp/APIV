@@ -8,8 +8,8 @@ import slick.jdbc.JdbcProfile
 
 class ApplicationComponents(context: Context)
     extends BuiltInComponentsFromContext(context)
-    with ServiceModule
     with RepositoryModule
+    with ServiceModule
     with SlickComponents
     with NoHttpFiltersComponents
     with ControllersModule

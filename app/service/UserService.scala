@@ -8,20 +8,10 @@ import java.util.UUID
 
 class UserService(userRepository: UserRepository) {
 
-  def getAll(): Action[AnyContent] = {
-    Action.async(userRepository.listAll().map(items => Ok(Json.toJson(items))))
-  }
+  def getAll() = userRepository.listAll()
 
-  def create(): Action[newUser] = {
-    Action.async(parse.json[newUser]) { request =>
-      userRepository.create(request.body).map(_ => Created)
-    }
-  }
+  def create(user: newUser) = userRepository.create(user)
 
-  def findByID(userid: UUID): Action[AnyContent] = {
-    Action.async(
-      userRepository.findByID(userid).map(items => Ok(Json.toJson(items)))
-    )
-  }
+  def findByID(userid: UUID) = userRepository.findByID(userid)
 
 }

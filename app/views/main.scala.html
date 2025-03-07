@@ -1,9 +1,9 @@
 @*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
- *@
+* This template is called from the `index` template. This template
+* handles the rendering of the page header and body tags. It takes
+* two arguments, a `String` for the title of the page and an `Html`
+* object to insert into the body of the page.
+*@
 @(title: String)(content: Html)
 
 <!DOCTYPE html>
@@ -11,15 +11,131 @@
     <head>
         @* Here's where we render the page title `String`. *@
         <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+        @* <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">*@
+        @* <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">*@
 
     </head>
     <body>
         @* And here's where we render the `Html` object containing
-         * the page content. *@
-        @content
+        * the page content. *@
+        <h1>Bank Accounts</h1>
 
-      <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
+        <button onclick="loadAccounts()">Daten laden</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>AccountID</th>
+                    <th>UserID</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id = "data-table"></tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>TransactionID</th>
+                    <th>accountID</th>
+                    <th>transaction</th>
+                    <th>datum</th>
+                    <th>amount</th>
+                </tr>
+            </thead>
+            <tbody id = "transaction-table"></tbody>
+        </table>
+
+        <script>
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    loadAccounts()
+                })
+
+                function loadTransactions(kontoid) {
+                    fetch("http://localhost:9000/transaction/fromBank/" + kontoid).then(response => {
+                        return response.json();
+                    }).then(data => {
+                                const tableBody = document.getElementById("transaction-table");
+                                tableBody.innerHTML = "";
+                                data.forEach(item => {
+                                    const row = document.createElement("tr")
+
+                                    const transactionIdCell = document.createElement("td");
+                                    transactionIdCell.textContent = item.transactionID;
+                                    row.append(transactionIdCell);
+
+                                    const accountIdCell = document.createElement("td");
+                                    accountIdCell.textContent = item.accountID;
+                                    row.append(accountIdCell);
+
+                                    const transactionCell = document.createElement("td");
+                                    transactionCell.textContent = item.transaction;
+                                    row.append(transactionCell);
+
+                                    const datumCell = document.createElement("td");
+                                    const date = new Date(item.datum)
+                                    datumCell.textContent = date.toLocaleDateString();
+                                    row.append(datumCell);
+
+                                    const amountCell = document.createElement("td");
+                                    amountCell.textContent = item.amount;
+                                    row.append(amountCell);
+
+                                    tableBody.append(row);
+
+                                })
+                            }
+                    )
+                }
+
+                function loadAccounts() {
+                    fetch("http://localhost:9000/bankAccount").then(response => {
+                        return response.json();
+                    })
+                            .then(data => {
+                                const tableBody = document.getElementById("data-table");
+                                tableBody.innerHTML = "";
+
+                                data.forEach(item => {
+                                    const row = document.createElement("tr");
+
+                                    const accountIdCell = document.createElement("td");
+                                    accountIdCell.textContent = item.accountid;
+                                    row.append(accountIdCell);
+
+                                    const userIDCell = document.createElement("td");
+                                    userIDCell.textContent = item.userid;
+                                    row.append(userIDCell);
+
+                                    const amountCell = document.createElement("td");
+                                    amountCell.textContent = item.amount;
+                                    row.append(amountCell);
+
+                                    const buttonCell = document.createElement("td");
+                                    const button = document.createElement("button");
+                                    button.textContent = "zeige Kontoverlauf"
+                                    button.onclick = function () {
+                                        loadTransactions(item.accountid)
+                                    }
+                                    row.appendChild(button)
+                                    row.append(buttonCell)
+
+                                    const buttonCellDeposit = document.createElement("td");
+                                    const buttonDeposit = document.createElement("button");
+                                    buttonDeposit.textContent = "Deposit Money"
+                                    buttonDeposit.onclick = function () {
+                                        loadTransactions(item.accountid)
+                                    }
+                                    row.appendChild(buttonDeposit)
+                                    row.append(buttonCellDeposit)
+
+
+                                    tableBody.append(row);
+                                })
+                            })
+
+                }
+        </script>
+        @* <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>*@
     </body>
 </html>

@@ -8,6 +8,8 @@ import play.api.routing.Router
 import repository.RepositoryModule
 import service.ServiceModule
 
+import scala.concurrent.ExecutionContext
+
 trait ControllersModule {
 
   this: BuiltInComponents with ServiceModule with RepositoryModule =>
@@ -18,7 +20,9 @@ trait ControllersModule {
 
   private lazy val controllers = Seq(
     wire[HomeController],
-    wire[UserController]
+    wire[UserController],
+    wire[BankAccountController],
+    wire[TransactionController]
   )
 
   lazy val router: Router = controllers.foldLeft(Router.empty) {
