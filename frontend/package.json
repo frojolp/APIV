@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ekz/async-data": "^0.4.7",
     "axios": "^1.8.2",
+    "bluebird": "^3.7.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@ekz/packer": "^0.16.0",
     "@eslint/js": "^9.21.0",
+    "@types/bluebird": "^3.5.42",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",

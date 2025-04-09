@@ -1,10 +1,12 @@
 package repository
 
-import models.{BankAccount, NewBankAccount}
+import models.{BankAccount, NewBankAccount, User}
+import projections.BankaccountWithUserName
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 import slick.lifted.ProvenShape
 
+import java.sql.Date
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -14,6 +16,26 @@ class BankAccountRepository(dbConfig: DatabaseConfig[JdbcProfile])(implicit
 
   import dbConfig._
   import profile.api._
+
+  private class UserTable(tag: Tag) extends Table[User](tag, "users") {
+    def userid = column[UUID]("userid", O.PrimaryKey)
+    def vorname = column[String]("vorname")
+    def nachname = column[String]("nachname")
+    def geburtstag = column[Date]("geburtstag")
+    def telefonnummer = column[String]("telefonnummer")
+    def email = column[String]("email")
+
+    override def * : ProvenShape[User] = (
+      userid,
+      vorname,
+      nachname,
+      geburtstag,
+      telefonnummer,
+      email
+    ) <> ((User.apply _).tupled, User.unapply)
+  }
+
+  private val users = TableQuery[UserTable]
 
   private class BankAccountTable(tag: Tag)
       extends Table[BankAccount](tag, "bankaccount") {
@@ -30,8 +52,18 @@ class BankAccountRepository(dbConfig: DatabaseConfig[JdbcProfile])(implicit
 
   private val bankAccounts = TableQuery[BankAccountTable]
 
-  def listAll(): Future[Seq[BankAccount]] = db.run {
-    bankAccounts.result
+  def listAll(): Future[Seq[BankaccountWithUserName]] = db.run {
+    bankAccounts.join(users).on(_.userid === _.userid).result.map {
+      _.map { case (bankAccount: BankAccount, user: User) =>
+        BankaccountWithUserName(
+          accountid = bankAccount.accountid,
+          userid= bankAccount.userid,
+          amount= bankAccount.amount,
+          vorname= user.vorname,
+          nachname= user.nachname
+        )
+      }
+    }
   }
 
   def create(bankAccount: NewBankAccount): Future[BankAccount] = {
