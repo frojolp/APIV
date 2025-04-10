@@ -16,8 +16,6 @@ export function AsyncDataRenderer<T>({
   renderError = (error) => <p>Fehler: {String(error)}</p>,
   renderInitial = () => null,
 }: AsyncDataRendererProps<T>) {
-
-console.log(asyncData.state)
     switch (asyncData.state) {
       case "Pending":
         return renderLoading();

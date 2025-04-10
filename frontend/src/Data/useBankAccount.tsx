@@ -11,17 +11,22 @@ export interface BankAccountApi {
 }
 
 export default function useBankAccount(): BankAccountApi {
+  const [userID, setUserID] = React.useState("");
   const [token, setRefresh] = useRefresh();
   const bankAccountDataData = useBankaccountData();
   const [bankAccount, setBankAccount] =
     React.useState<AsyncData<BankAccount[]>>(Empty);
 
+    console.log(userID)
+
   React.useEffect(() => {
-    return observePromise(
-      bankAccountDataData.fetchBankAccount(),
-      setBankAccount
-    );
-  }, [bankAccountDataData, token]);
+    if (userID !== "")
+      observePromise(
+        bankAccountDataData.getBankAccountByUserID(userID),
+        setBankAccount
+      );
+    else observePromise(bankAccountDataData.fetchBankAccount(), setBankAccount);
+  }, [bankAccountDataData, token, userID]);
 
   const createBankAccount = React.useCallback((request: string) => {
     const promise = bankAccountDataData
@@ -30,9 +35,12 @@ export default function useBankAccount(): BankAccountApi {
     return promise;
   }, []);
 
-  const getBankAccountByUserID = React.useCallback((userID: string)=> {
-    return observePromise(bankAccountDataData.getBankAccountByUserID(userID), setBankAccount);
-  }, [bankAccountDataData, token])
+  const getBankAccountByUserID = React.useCallback(
+    (userID: string) => {
+      setUserID(userID)
+    },
+    [bankAccountDataData]
+  );
 
   return React.useMemo(() => {
     return {
@@ -40,5 +48,5 @@ export default function useBankAccount(): BankAccountApi {
       createBankAccount: createBankAccount,
       getBankAccountByUserID: getBankAccountByUserID,
     };
-  }, [setRefresh, bankAccount]);
+  }, [setRefresh, bankAccount, userID]);
 }

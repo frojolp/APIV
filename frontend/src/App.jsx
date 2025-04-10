@@ -53,7 +53,6 @@ function App() {
   const [accountID, setAccountID] = useState("");
 
   useEffect(() => {
-    setRefresh();
     fetchUser();
   }, [fetchUser]);
 
