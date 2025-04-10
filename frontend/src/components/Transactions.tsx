@@ -3,6 +3,8 @@ import { Table } from "react-bootstrap";
 
 export default function Transactions({transactions}) {
 
+  
+
     console.log(transactions)
     if (transactions.length === 0) {
       return;

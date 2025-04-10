@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Modal,
@@ -20,6 +20,8 @@ import Users from "./components/Users";
 import DropDown from "./components/DropDown";
 import Popup from "./components/Popup";
 import Transactions from "./components/Transactions";
+import useBankAccount from "./Data/useBankAccount";
+import useRefresh from "./Data/useRefresh";
 
 function App() {
   const defaultInputValue = {
@@ -32,13 +34,14 @@ function App() {
     userid: "",
   };
   const {
-    fetchBankAccount,
     depositMoney,
     withdrawMoney,
     createBankAccount,
     getBankAccountByUserID,
     bankAccounts,
-  } = useBankAccountGenerationAPI();
+  } = useBankAccount();
+
+  const [token, setRefresh] = useRefresh();
   const { fetchUser, createUser, users } = useUserGenerationAPI();
   const { getTransactionsFromBankID, transactions } = transactionData();
   const [loggedInUser, setLoggedInUser] = useState("");
@@ -50,9 +53,9 @@ function App() {
   const [accountID, setAccountID] = useState("");
 
   useEffect(() => {
-    fetchBankAccount();
+    setRefresh();
     fetchUser();
-  }, [fetchBankAccount, fetchUser]);
+  }, [fetchUser]);
 
   const handleConfirm = () => {
     if (popupType === "deposit" || popupType === "withdraw") {
@@ -75,7 +78,6 @@ function App() {
     setShow(false);
     setAccountID("");
     setPopupType("");
-    fetchBankAccount();
   };
 
   function showPopup(accountID, popupType) {
@@ -96,9 +98,9 @@ function App() {
   const handleLogin = (newRequestUser) => {
     if (newRequestUser === loggedInUser) {
       setLoggedInUser("");
-      fetchBankAccount();
+      setRefresh();
     } else {
-      if (newRequestUser === "") fetchBankAccount();
+      if (newRequestUser === "") setRefresh();
       else {
         setLoggedInUser(newRequestUser);
         getBankAccountByUserID(newRequestUser);

@@ -6,3 +6,50 @@ INFO: Unsupported notification method: $/setTrace
 2025.04.09 15:24:59 INFO  Shutting down server
 2025.04.09 15:24:59 INFO  shutting down Metals
 2025.04.09 15:24:59 INFO  Exiting server
+2025.04.09 18:25:40 INFO  Started: Metals version 1.5.2 in folders 'C:\Users\Mariu\IdeaProjects\APIV' for client Visual Studio Code 1.97.2.
+2025.04.09 18:25:45 INFO  running 'C:\Users\Mariu\AppData\Local\Coursier\cache\arc\https\github.com\adoptium\temurin17-binaries\releases\download\jdk-17.0.13%252B11\OpenJDK17U-jdk_x64_windows_hotspot_17.0.13_11.zip\jdk-17.0.13+11\bin\java.exe -Djline.terminal=jline.UnsupportedTerminal -Dsbt.log.noformat=true -Dfile.encoding=UTF-8 -jar E:\TEMP\_Marius\-3-\metals1155145250590098836\sbt-launch.jar -Dbloop.export-jar-classifiers=sources bloopInstall'
+2025.04.09 18:25:48 ERROR sbt.internal.ServerAlreadyBootingException: java.io.IOException: Could not create lock for \\.\pipe\sbt-load-7636445015281461554_lock, error 5
+2025.04.09 18:25:48 INFO  sbt thinks that server is already booting because of this exception:
+2025.04.09 18:25:48 ERROR 	at sbt.internal.BootServerSocket.newSocket(BootServerSocket.java:357)
+2025.04.09 18:25:48 ERROR 	at sbt.internal.BootServerSocket.<init>(BootServerSocket.java:296)
+2025.04.09 18:25:48 ERROR 	at sbt.xMain$.getSocketOrExit(Main.scala:153)
+2025.04.09 18:25:48 ERROR 	at sbt.xMain$.bootServerSocket$lzycompute$1(Main.scala:79)
+2025.04.09 18:25:48 ERROR 	at sbt.xMain$.bootServerSocket$1(Main.scala:79)
+2025.04.09 18:25:48 ERROR 	at sbt.xMain$.withStreams$1(Main.scala:87)
+2025.04.09 18:25:48 ERROR 	at sbt.xMain$.run(Main.scala:124)
+2025.04.09 18:25:48 ERROR 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+2025.04.09 18:25:48 ERROR 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+2025.04.09 18:25:48 ERROR 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+2025.04.09 18:25:48 ERROR 	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+2025.04.09 18:25:48 ERROR 	at sbt.internal.XMainConfiguration.run(XMainConfiguration.java:59)
+2025.04.09 18:25:48 ERROR 	at sbt.xMain.run(Main.scala:48)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Launch$.$anonfun$run$1(Launch.scala:149)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Launch$.withContextLoader(Launch.scala:176)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Launch$.run(Launch.scala:149)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Launch$.$anonfun$apply$1(Launch.scala:44)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Launch$.launch(Launch.scala:159)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Launch$.apply(Launch.scala:44)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Launch$.apply(Launch.scala:21)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Boot$.runImpl(Boot.scala:78)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Boot$.run(Boot.scala:73)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Boot$.main(Boot.scala:21)
+2025.04.09 18:25:48 ERROR 	at xsbt.boot.Boot.main(Boot.scala)
+2025.04.09 18:25:48 ERROR Caused by: java.io.IOException: Could not create lock for \\.\pipe\sbt-load-7636445015281461554_lock, error 5
+2025.04.09 18:25:48 ERROR 	at org.scalasbt.ipcsocket.Win32NamedPipeServerSocket.<init>(Win32NamedPipeServerSocket.java:129)
+2025.04.09 18:25:48 ERROR 	at org.scalasbt.ipcsocket.Win32NamedPipeServerSocket.<init>(Win32NamedPipeServerSocket.java:48)
+2025.04.09 18:25:48 ERROR 	at sbt.internal.BootServerSocket.newSocket(BootServerSocket.java:351)
+2025.04.09 18:25:48 ERROR 	... 23 more
+2025.04.09 18:25:48 INFO  time: ran 'sbt bloopInstall' in 2.71s
+2025.04.09 18:25:48 ERROR sbt command failed: C:\Users\Mariu\AppData\Local\Coursier\cache\arc\https\github.com\adoptium\temurin17-binaries\releases\download\jdk-17.0.13%252B11\OpenJDK17U-jdk_x64_windows_hotspot_17.0.13_11.zip\jdk-17.0.13+11\bin\java.exe -Djline.terminal=jline.UnsupportedTerminal -Dsbt.log.noformat=true -Dfile.encoding=UTF-8 -jar E:\TEMP\_Marius\-3-\metals1155145250590098836\sbt-launch.jar -Dbloop.export-jar-classifiers=sources bloopInstall
+2025.04.09 18:25:51 INFO  compilation cancelled
+Apr. 09, 2025 6:25:58 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFORMATION: Unsupported notification method: $/setTrace
+Apr. 09, 2025 6:26:18 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFORMATION: Unsupported notification method: $/setTrace
+Apr. 09, 2025 6:26:53 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFORMATION: Unsupported notification method: $/setTrace
+Apr. 09, 2025 6:27:23 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFORMATION: Unsupported notification method: $/setTrace
+2025.04.09 18:47:59 INFO  Shutting down server
+2025.04.09 18:47:59 INFO  shutting down Metals
+2025.04.09 18:47:59 INFO  Exiting server

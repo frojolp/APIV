@@ -18,7 +18,7 @@ type bankAccountDataAPI = {
   withdrawMoney: (accountid: string, amount: number) => Promise<void>;
 };
 
-export default function useBankAccountGenerationAPI(): bankAccountDataAPI {
+export default function useBankAccountData(): bankAccountDataAPI {
   return React.useMemo(() => {
     return {
       fetchBankAccount() {
