@@ -12,8 +12,16 @@ import React from "react";
 import useBankAccount from "../Data/useBankAccount";
 import { AsyncDataRenderer } from "../Data/AsyncDataRenderer";
 
-export default function Account({ showTransaction, showPopup }) {
-  const { bankAccounts } = useBankAccount();
+type Props = {
+  userID: string;
+  showTransaction: (accountID: string) => void;
+  showPopup: (accountID: string, popupType: string) => void;
+};
+
+export default function Account(props: Props) {
+  const { userID, showTransaction, showPopup } = props;
+  const { bankAccounts } = useBankAccount(userID);
+  // console.log(bankAccounts);
 
   return (
     <div>

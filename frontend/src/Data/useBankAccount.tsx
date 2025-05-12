@@ -7,46 +7,62 @@ import useRefresh from "./useRefresh";
 export interface BankAccountApi {
   bankAccounts: AsyncData<BankAccount[]>;
   createBankAccount: (request: string) => Promise<void>;
-  getBankAccountByUserID: (userID: string) => void;
+  depositMoney: (accountID: string, amount: number) => Promise<void>;
+  withdrawMoney: (accountID: string, amount: number) => Promise<void>;
 }
 
-export default function useBankAccount(): BankAccountApi {
-  const [userID, setUserID] = React.useState("");
+export default function useBankAccount(userID: string): BankAccountApi {
   const [token, setRefresh] = useRefresh();
   const bankAccountDataData = useBankaccountData();
   const [bankAccount, setBankAccount] =
     React.useState<AsyncData<BankAccount[]>>(Empty);
 
-    console.log(userID)
+    console.log(bankAccount)
 
   React.useEffect(() => {
-    if (userID !== "")
-      observePromise(
+    if (userID && userID !== "") {
+     return observePromise(
         bankAccountDataData.getBankAccountByUserID(userID),
         setBankAccount
       );
-    else observePromise(bankAccountDataData.fetchBankAccount(), setBankAccount);
+    } else {
+      return observePromise(bankAccountDataData.fetchBankAccount(), setBankAccount);
+    }
   }, [bankAccountDataData, token, userID]);
 
   const createBankAccount = React.useCallback((request: string) => {
     const promise = bankAccountDataData
       .createBankAccount(request)
-      .finally(() => {});
+      .finally(() => setRefresh());
     return promise;
   }, []);
 
-  const getBankAccountByUserID = React.useCallback(
-    (userID: string) => {
-      setUserID(userID)
+  const depositMoney = React.useCallback(
+    (accountID: string, amount: number) => {
+      const promise =  bankAccountDataData
+        .depositMoney(accountID, amount)
+        .finally(() => setRefresh());
+        return promise
     },
-    [bankAccountDataData]
+    [setRefresh, bankAccountDataData]
+  );
+
+  const withdrawMoney = React.useCallback(
+    (accountID: string, amount: number) => {
+      const promise =  bankAccountDataData
+        .withdrawMoney(accountID, amount)
+        .finally(() => setRefresh());
+        return promise
+    },
+    [setRefresh, bankAccountDataData]
   );
 
   return React.useMemo(() => {
     return {
       bankAccounts: bankAccount,
       createBankAccount: createBankAccount,
-      getBankAccountByUserID: getBankAccountByUserID,
+      depositMoney: depositMoney,
+      withdrawMoney: withdrawMoney,
     };
   }, [setRefresh, bankAccount, userID]);
 }

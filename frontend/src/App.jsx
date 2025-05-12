@@ -1,4 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  // , useCallback
+} from "react";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Modal,
@@ -11,7 +16,7 @@ import {
   DropdownButton,
 } from "react-bootstrap";
 
-import useBankAccountGenerationAPI from "./Data/useBankAccountData";
+// import useBankAccountGenerationAPI from "./Data/useBankAccountData";
 import useUserGenerationAPI from "./Data/userData";
 import transactionData from "./Data/transactionData";
 import Login from "./components/login";
@@ -21,7 +26,7 @@ import DropDown from "./components/DropDown";
 import Popup from "./components/Popup";
 import Transactions from "./components/Transactions";
 import useBankAccount from "./Data/useBankAccount";
-import useRefresh from "./Data/useRefresh";
+// import useRefresh from "./Data/useRefresh";
 
 function App() {
   const defaultInputValue = {
@@ -33,15 +38,9 @@ function App() {
     email: "",
     userid: "",
   };
-  const {
-    depositMoney,
-    withdrawMoney,
-    createBankAccount,
-    getBankAccountByUserID,
-    bankAccounts,
-  } = useBankAccount();
+  const { depositMoney, withdrawMoney, createBankAccount } = useBankAccount();
 
-  const [token, setRefresh] = useRefresh();
+  // const [token, setRefresh] = useRefresh();
   const { fetchUser, createUser, users } = useUserGenerationAPI();
   const { getTransactionsFromBankID, transactions } = transactionData();
   const [loggedInUser, setLoggedInUser] = useState("");
@@ -51,6 +50,7 @@ function App() {
   const [showTransaction, setShowTransaction] = useState(false);
   const [popupType, setPopupType] = useState("");
   const [accountID, setAccountID] = useState("");
+
 
   useEffect(() => {
     fetchUser();
@@ -95,15 +95,10 @@ function App() {
   };
 
   const handleLogin = (newRequestUser) => {
-    if (newRequestUser === loggedInUser) {
+    if (newRequestUser === loggedInUser || newRequestUser === "") {
       setLoggedInUser("");
-      setRefresh();
     } else {
-      if (newRequestUser === "") setRefresh();
-      else {
-        setLoggedInUser(newRequestUser);
-        getBankAccountByUserID(newRequestUser);
-      }
+      setLoggedInUser(newRequestUser);
     }
   };
 
@@ -134,7 +129,7 @@ function App() {
       <div>
         {content === "bankAccounts" ? (
           <Account
-            accounts={bankAccounts}
+            userID={loggedInUser}
             showTransaction={showTransactions}
             showPopup={showPopup}
           />

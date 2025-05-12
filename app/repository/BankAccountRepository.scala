@@ -57,10 +57,10 @@ class BankAccountRepository(dbConfig: DatabaseConfig[JdbcProfile])(implicit
       _.map { case (bankAccount: BankAccount, user: User) =>
         BankaccountWithUserName(
           accountid = bankAccount.accountid,
-          userid= bankAccount.userid,
-          amount= bankAccount.amount,
-          vorname= user.vorname,
-          nachname= user.nachname
+          userid = bankAccount.userid,
+          amount = bankAccount.amount,
+          vorname = user.vorname,
+          nachname = user.nachname
         )
       }
     }
@@ -75,13 +75,45 @@ class BankAccountRepository(dbConfig: DatabaseConfig[JdbcProfile])(implicit
     db.run(bankAccounts += newBankAccount).map(_ => newBankAccount)
   }
 
-  def findByID(bankAccountID: UUID): Future[Option[BankAccount]] = db.run {
-    bankAccounts.filter(_.accountid === bankAccountID).result.headOption
-  }
+  def findByID(bankAccountID: UUID): Future[Option[BankaccountWithUserName]] =
+    db.run {
+      bankAccounts
+        .filter(_.accountid === bankAccountID)
+        .join(users)
+        .on(_.userid === _.userid)
+        .result
+        .map {
+          _.map { case (bankAccount: BankAccount, user: User) =>
+            BankaccountWithUserName(
+              accountid = bankAccount.accountid,
+              userid = bankAccount.userid,
+              amount = bankAccount.amount,
+              vorname = user.vorname,
+              nachname = user.nachname
+            )
+          }.headOption
+        }
+    }
 
-  def findByUserID(userID: UUID): Future[Seq[BankAccount]] = db.run {
-    bankAccounts.filter(_.userid === userID).result
-  }
+  def findByUserID(userID: UUID): Future[Seq[BankaccountWithUserName]] =
+    db.run {
+      bankAccounts
+        .filter(_.userid === userID)
+        .join(users)
+        .on(_.userid === _.userid)
+        .result
+        .map {
+          _.map { case (bankAccount: BankAccount, user: User) =>
+            BankaccountWithUserName(
+              accountid = bankAccount.accountid,
+              userid = bankAccount.userid,
+              amount = bankAccount.amount,
+              vorname = user.vorname,
+              nachname = user.nachname
+            )
+          }
+        }
+    }
 
   def depositMoney(bankAccountID: UUID, amount: Int): Future[Int] = {
     val action = for {
