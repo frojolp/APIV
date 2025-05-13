@@ -9,6 +9,7 @@ export interface BankAccountApi {
   createBankAccount: (request: string) => Promise<void>;
   depositMoney: (accountID: string, amount: number) => Promise<void>;
   withdrawMoney: (accountID: string, amount: number) => Promise<void>;
+  refreshConfigs: () => void;
 }
 
 export default function useBankAccount(userID: string): BankAccountApi {
@@ -16,43 +17,48 @@ export default function useBankAccount(userID: string): BankAccountApi {
   const bankAccountDataData = useBankaccountData();
   const [bankAccount, setBankAccount] =
     React.useState<AsyncData<BankAccount[]>>(Empty);
-
-    console.log(bankAccount)
-
+    
   React.useEffect(() => {
     if (userID && userID !== "") {
-     return observePromise(
+      return observePromise(
         bankAccountDataData.getBankAccountByUserID(userID),
         setBankAccount
       );
     } else {
-      return observePromise(bankAccountDataData.fetchBankAccount(), setBankAccount);
+      return observePromise(
+        bankAccountDataData.fetchBankAccount(),
+        setBankAccount
+      );
     }
   }, [bankAccountDataData, token, userID]);
 
-  const createBankAccount = React.useCallback((request: string) => {
-    const promise = bankAccountDataData
-      .createBankAccount(request)
-      .finally(() => setRefresh());
-    return promise;
-  }, []);
+  const createBankAccount = React.useCallback(
+    (request: string) => {
+      const promise = bankAccountDataData
+        .createBankAccount(request)
+        .finally(() => setRefresh());
+      return promise;
+    },
+    [bankAccountDataData, setRefresh]
+  );
 
   const depositMoney = React.useCallback(
     (accountID: string, amount: number) => {
-      const promise =  bankAccountDataData
+      const promise = bankAccountDataData
         .depositMoney(accountID, amount)
         .finally(() => setRefresh());
-        return promise
+      return promise;
     },
     [setRefresh, bankAccountDataData]
   );
 
+
   const withdrawMoney = React.useCallback(
     (accountID: string, amount: number) => {
-      const promise =  bankAccountDataData
+      const promise = bankAccountDataData
         .withdrawMoney(accountID, amount)
         .finally(() => setRefresh());
-        return promise
+      return promise;
     },
     [setRefresh, bankAccountDataData]
   );
@@ -63,6 +69,7 @@ export default function useBankAccount(userID: string): BankAccountApi {
       createBankAccount: createBankAccount,
       depositMoney: depositMoney,
       withdrawMoney: withdrawMoney,
+      refreshConfigs: setRefresh
     };
-  }, [setRefresh, bankAccount, userID]);
+  }, [bankAccount, createBankAccount, depositMoney, withdrawMoney]);
 }

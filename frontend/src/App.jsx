@@ -38,19 +38,25 @@ function App() {
     email: "",
     userid: "",
   };
-  const { depositMoney, withdrawMoney, createBankAccount } = useBankAccount();
+  const [loggedInUser, setLoggedInUser] = useState("");
+
+  const {
+    depositMoney,
+    withdrawMoney,
+    createBankAccount,
+    bankAccounts,
+    // refreshConfigs,
+  } = useBankAccount(loggedInUser);
 
   // const [token, setRefresh] = useRefresh();
   const { fetchUser, createUser, users } = useUserGenerationAPI();
   const { getTransactionsFromBankID, transactions } = transactionData();
-  const [loggedInUser, setLoggedInUser] = useState("");
   const [show, setShow] = useState(false);
   const [content, setContent] = useState("bankAccounts");
   const [inputValue, setInputValue] = useState(defaultInputValue);
   const [showTransaction, setShowTransaction] = useState(false);
   const [popupType, setPopupType] = useState("");
   const [accountID, setAccountID] = useState("");
-
 
   useEffect(() => {
     fetchUser();
@@ -123,15 +129,17 @@ function App() {
           </ButtonGroup>
         </div>
         <div>
-          <Login setLoggedInUser={handleLogin} loggedUser={loggedInUser} />
+          {content === "bankAccounts" && (
+            <Login setLoggedInUser={handleLogin} loggedUser={loggedInUser} />
+          )}
         </div>
       </div>
       <div>
         {content === "bankAccounts" ? (
           <Account
-            userID={loggedInUser}
             showTransaction={showTransactions}
             showPopup={showPopup}
+            bankAccounts={bankAccounts}
           />
         ) : (
           <Users users={users} />

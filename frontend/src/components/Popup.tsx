@@ -105,7 +105,6 @@ export default function Popup({
         ...inputValue,
         [event.target.name]: event.target.value,
       });
-      console.log(inputValue);
     };
   
     return (

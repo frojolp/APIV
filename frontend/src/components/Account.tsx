@@ -9,19 +9,20 @@ import {
   DropdownButton,
 } from "react-bootstrap";
 import React from "react";
-import useBankAccount from "../Data/useBankAccount";
 import { AsyncDataRenderer } from "../Data/AsyncDataRenderer";
+import { BankAccount } from "../Data/useBankAccountData";
+import { AsyncData } from "@ekz/async-data";
+// import useRefresh from "../Data/useRefresh";
 
 type Props = {
-  userID: string;
   showTransaction: (accountID: string) => void;
   showPopup: (accountID: string, popupType: string) => void;
+  bankAccounts: AsyncData<BankAccount[]>;
 };
 
 export default function Account(props: Props) {
-  const { userID, showTransaction, showPopup } = props;
-  const { bankAccounts } = useBankAccount(userID);
-  // console.log(bankAccounts);
+  const { showTransaction, showPopup, bankAccounts } = props;
+  // const [token, setRefresh] = useRefresh();
 
   return (
     <div>
