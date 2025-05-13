@@ -3,7 +3,7 @@ import { Empty, observePromise, type AsyncData } from "@ekz/async-data";
 import React from "react";
 import useBankaccountData from "./useBankAccountData";
 import useRefresh from "./useRefresh";
-import { Transaction } from "./transactionData";
+import { Transaction } from "./useTransactionData";
 import useTransactionData from "./useTransactionData";
 
 export interface TransactionApi {

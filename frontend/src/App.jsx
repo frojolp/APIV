@@ -18,7 +18,7 @@ import {
 
 // import useBankAccountGenerationAPI from "./Data/useBankAccountData";
 import useUserGenerationAPI from "./Data/userData";
-import transactionData from "./Data/transactionData";
+// import transactionData from "./Data/transactionData";
 import Login from "./components/login";
 import Account from "./components/Account";
 import Users from "./components/Users";
@@ -26,6 +26,8 @@ import DropDown from "./components/DropDown";
 import Popup from "./components/Popup";
 import Transactions from "./components/Transactions";
 import useBankAccount from "./Data/useBankAccount";
+import useTransactions from "./Data/useTransactions";
+import { AsyncDataRenderer } from "./Data/AsyncDataRenderer";
 // import useRefresh from "./Data/useRefresh";
 
 function App() {
@@ -50,13 +52,17 @@ function App() {
 
   // const [token, setRefresh] = useRefresh();
   const { fetchUser, createUser, users } = useUserGenerationAPI();
-  const { getTransactionsFromBankID, transactions } = transactionData();
+  // const { getTransactionsFromBankID, transactions } = transactionData();
+  const [bankId, setBankId] = useState("");
+  const { transactions } = useTransactions(bankId);
   const [show, setShow] = useState(false);
   const [content, setContent] = useState("bankAccounts");
   const [inputValue, setInputValue] = useState(defaultInputValue);
   const [showTransaction, setShowTransaction] = useState(false);
   const [popupType, setPopupType] = useState("");
   const [accountID, setAccountID] = useState("");
+
+  console.log(transactions)
 
   useEffect(() => {
     fetchUser();
@@ -92,7 +98,8 @@ function App() {
   }
 
   function showTransactions(accountID) {
-    getTransactionsFromBankID(accountID).then(setShowTransaction(true));
+    setBankId(accountID);
+    setShowTransaction(true);
   }
 
   const changeContent = (content) => {
@@ -144,7 +151,14 @@ function App() {
         ) : (
           <Users users={users} />
         )}
-        {showTransaction && <Transactions transactions={transactions} />}
+        {showTransaction && (
+          <AsyncDataRenderer
+            asyncData={transactions}
+            renderData={(transactions) => (
+              <Transactions transactions={transactions} />
+            )}
+          />
+        )}
         <Popup
           show={show}
           onClose={() => setShow(false)}

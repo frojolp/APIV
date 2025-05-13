@@ -1,7 +1,14 @@
 import axios from "axios";
 import React from "react";
 import Bluebird from "bluebird";
-import { Transaction } from "./transactionData";
+
+export type Transaction = {
+  accountid: string;
+  transaction: string;
+  amount: number;
+  date: Date;
+  transactionid: String;
+};
 
 type transactionDataAPI = {
     getTransactionsFromBankID: (bankId: string) => Promise<Transaction[]>;
