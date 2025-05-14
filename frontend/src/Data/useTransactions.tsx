@@ -11,11 +11,11 @@ export interface TransactionApi {
 }
 
 export default function useTransactions(bankId: string): TransactionApi {
-  const [token, setRefresh] = useRefresh();
+  // const [token, setRefresh] = useRefresh();
   const transactionsDataData = useTransactionData();
   const [transactions, setTransactions] =
     React.useState<AsyncData<Transaction[]>>(Empty);
-    
+
   React.useEffect(() => {
     if (bankId && bankId !== "") {
       return observePromise(
@@ -23,13 +23,13 @@ export default function useTransactions(bankId: string): TransactionApi {
         setTransactions
       );
     } else {
-      setTransactions(Empty)
+      setTransactions(Empty);
     }
-  }, [transactionsDataData, token, bankId]);
+  }, [transactionsDataData, bankId]);
 
   return React.useMemo(() => {
     return {
-      transactions: transactions
+      transactions: transactions,
     };
-  }, []);
+  }, [transactions]);
 }

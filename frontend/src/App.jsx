@@ -42,17 +42,10 @@ function App() {
   };
   const [loggedInUser, setLoggedInUser] = useState("");
 
-  const {
-    depositMoney,
-    withdrawMoney,
-    createBankAccount,
-    bankAccounts,
-    // refreshConfigs,
-  } = useBankAccount(loggedInUser);
+  const { depositMoney, withdrawMoney, createBankAccount, bankAccounts } =
+    useBankAccount(loggedInUser);
 
-  // const [token, setRefresh] = useRefresh();
   const { fetchUser, createUser, users } = useUserGenerationAPI();
-  // const { getTransactionsFromBankID, transactions } = transactionData();
   const [bankId, setBankId] = useState("");
   const { transactions } = useTransactions(bankId);
   const [show, setShow] = useState(false);
@@ -62,7 +55,7 @@ function App() {
   const [popupType, setPopupType] = useState("");
   const [accountID, setAccountID] = useState("");
 
-  console.log(transactions)
+  console.log(transactions);
 
   useEffect(() => {
     fetchUser();
@@ -98,8 +91,12 @@ function App() {
   }
 
   function showTransactions(accountID) {
-    setBankId(accountID);
-    setShowTransaction(true);
+    if (bankId === accountID) {
+      setShowTransaction(false);
+    } else {
+      setBankId(accountID);
+      setShowTransaction(true);
+    }
   }
 
   const changeContent = (content) => {

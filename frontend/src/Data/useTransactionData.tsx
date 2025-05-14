@@ -11,15 +11,17 @@ export type Transaction = {
 };
 
 type transactionDataAPI = {
-    getTransactionsFromBankID: (bankId: string) => Promise<Transaction[]>;
+  getTransactionsFromBankID: (bankId: string) => Promise<Transaction[]>;
 };
 
 export default function useTransactionData(): transactionDataAPI {
   return React.useMemo(() => {
-    return {getTransactionsFromBankID(bankId: string) {
+    return {
+      getTransactionsFromBankID(bankId: string) {
         return axios
           .get<Transaction[]>("/api/transaction/fromBank/" + bankId)
           .then((response) => response.data);
-      }}
+      },
+    };
   }, []);
 }
